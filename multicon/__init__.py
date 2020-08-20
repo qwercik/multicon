@@ -1,4 +1,4 @@
-def __is_dict(var):
+def _is_dict(var):
 	return isinstance(var, dict)
 
 class ConfigKeyNotExistError(Exception):
@@ -17,7 +17,7 @@ class Config:
 
 	def __getitem__(self, key):
 		if key in self.custom:
-			if __is_dict(self.custom[key]) and key in self.default and __is_dict(self.default[key]):
+			if _is_dict(self.custom[key]) and key in self.default and _is_dict(self.default[key]):
 				return dict(Config(self.default[key], self.custom[key]))
 			else:
 				return self.custom[key]
@@ -26,6 +26,12 @@ class Config:
 			return self.default[key]
 
 		raise ConfigKeyNotExistError(f'Key {key} not exist')
+
+	def __delitem__(self, key):
+		if key not in self.custom:
+			raise ConfigKeyNotExistError(f'Key {key} not exist')
+
+		del self.custom[key]
 	
 	def __iter__(self):
 		all_keys = set(self.default.keys()).union(set(self.custom.keys()))

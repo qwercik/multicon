@@ -3,6 +3,7 @@ A tiny module for joining multiple configs into one.
 
 ## Usage
 ```python
+#!/usr/bin/env python3.8
 import multicon
 
 c1 = {
@@ -24,7 +25,16 @@ c2 = {
 	'e': 9427
 }
 
-c = Config(c1, c2)
+# Create config, where c1 is default, and c2 is custom (c2 options can override c1 ones)
+c = multicon.Config(c1, c2)
+
+# Set a new custom option
+c['g'] = 117
+
+# Remove a custom option
+del c['b']
+
+# Print config as dict
 print(dict(c))
 ```
 
@@ -57,6 +67,8 @@ c3 = {
 	}
 }
 
+# Config c1 is default, c2 overrides c1, c3 overrides both
+# Custom config is empty at the moment
 multiconfig = multicon.MultiConfig([c1, c2, c3], {})
 try:
 	print(multiconfig['a'])
